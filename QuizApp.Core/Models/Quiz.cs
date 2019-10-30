@@ -5,7 +5,7 @@ namespace QuizApp.Core.Models
 {
     public class Quiz 
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string Instuctions { get; set; }

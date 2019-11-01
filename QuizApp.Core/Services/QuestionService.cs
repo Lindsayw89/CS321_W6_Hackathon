@@ -13,11 +13,29 @@ namespace QuizApp.Core.Services
         public QuestionService(IQuestionRepository questionRepository)
         {
             _questionRepository = questionRepository;
+
         }
 
         public Question Add(Question question)
         {
-            return _questionRepository.Add(question);
+            if( question.Answers.Count <2)
+            {
+                throw new Exception(" need more answer choices");
+            }
+            else
+            {
+                var count = question.Answers.Count(a => a.IsCorrect == true);
+                  if(count!=1)
+                {
+                    throw new Exception("more than one correct answer");
+                }
+            }
+            
+              
+                return _questionRepository.Add(question);
+
+           
+
         }
         public Question Get(int id)
         {
@@ -29,6 +47,19 @@ namespace QuizApp.Core.Services
         }
         public Question Update(Question updatedQuestion)
         {
+
+            if (updatedQuestion.Answers.Count < 2)
+            {
+                throw new Exception(" need more answer choices");
+            }
+            else
+            {
+                var count = updatedQuestion.Answers.Count(a => a.IsCorrect == true);
+                if (count != 1)
+                {
+                    throw new Exception("more than one correct answer");
+                }
+            }
             return _questionRepository.Update(updatedQuestion);
         }
         public void Remove(int id)

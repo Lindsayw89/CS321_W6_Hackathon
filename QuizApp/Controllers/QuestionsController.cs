@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
@@ -14,7 +15,7 @@ namespace QuizApp.Controllers
         private readonly IQuestionService _questionService;
 
         // TODO: create a constructor and inject the question service
-        public QuestionsController()
+        public QuestionsController(IQuestionService questionService)
         {
             _questionService = questionService;
         }
@@ -28,26 +29,38 @@ namespace QuizApp.Controllers
             // that will return all questions
             // ModelState.AddModelError("GetQuestions", "Not Implemented!");
             // return BadRequest(ModelState);
-            return Ok(_questionService.GetAll());
-            ModelState.AddModelError("GetQustions", "Not Implemented!");
-            return BadRequest(ModelState);
+            try
+            {
+                return Ok(_questionService.GetAll());
+            }
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("GetQuestions", ex.Message);
+                return BadRequest(ModelState);
+            }
 
 
         }
 
         // TODO: anonymous users can still call this action
         [HttpGet("{id}")]
-        public IActionResult Get()
+        public IActionResult Get(int id)
         {
             // TODO: replace the following code with a complete implementation
             // that will return a single question based on id
             // ModelState.AddModelError("GetQuestion", "Not Implemented!");
             // return BadRequest(ModelState);
-            var question = _questionService.Get(id);
-            if (question == null) return NotFound();
-            return Ok(question);
-            ModelState.AddModelError("Get Question", "Not Implemented!");
-            return BadRequest(ModelState);
+            try
+            {
+                var question = _questionService.Get(id);
+                if (question == null) return NotFound();
+                return Ok(question);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Get Question", ex.Message);
+                return BadRequest(ModelState);
+            }
         }
 
         // TODO: only authenticated users can call this action

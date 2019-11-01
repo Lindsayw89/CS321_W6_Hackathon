@@ -87,18 +87,36 @@ namespace QuizApp.Controllers
         {
             // TODO: replace the following code with a complete implementation
             // that will update a question
-            ModelState.AddModelError("UpdateQuestion", "Not Implemented!");
-            return BadRequest(ModelState);
+            try
+            {
+                return Ok(_questionService.Update(questionModel.ToDomainModel()));
+            }
+            catch(Exception Ex)
+            {
+
+                ModelState.AddModelError("UpdateQuestion", Ex.Message);
+                return BadRequest(ModelState);
+            }
         }
 
         // TODO: only authenticated users can call this action
-        [HttpDelete]
-        public IActionResult Remove()
+        [HttpDelete("{id}")]
+        public IActionResult Remove(int id)
         {
-            // TODO: replace the following code with a complete implementation
-            // that will delete a question
-            ModelState.AddModelError("RemoveQuestion", "Not Implemented!");
+        // TODO: replace the following code with a complete implementation
+        // that will delete a question
+        try
+        {
+            _questionService.Remove(id);
+                return NoContent();
+        }
+        catch (Exception Ex)
+        {
+
+
+            ModelState.AddModelError("RemoveQuestion", Ex.Message);
             return BadRequest(ModelState);
+        }
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
@@ -12,24 +13,40 @@ namespace QuizApp.Controllers
 
         private readonly IQuizService _quizService;
 
-        // TODO: create a constructor and inject quiz service
+        //inject quiz service
+        public QuizzesController(IQuizService quizService)
+        {
+            _quizService = quizService;
+        }
 
         [HttpGet()]
         public IActionResult GetQuizzes()
         {
-            // TODO: replace the following code with a complete implementation
             // that will return quizzes from the database
-            ModelState.AddModelError("GetQuizzes", "Not Implemented!");
-            return BadRequest(ModelState);
+            try
+            {
+                return Ok(_quizService.GetAll().ToApiModels());
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("GetQuiz", ex.Message);
+                return BadRequest(ModelState);
+            }
         }
 
         [HttpGet("{id}")]
         public IActionResult GetQuiz(int id)
         {
-            // TODO: replace the following code with a complete implementation
-            // that will return a single quiz
-            ModelState.AddModelError("GetQuiz", "Not Implemented!");
-            return BadRequest(ModelState);
+            // : replace the following code with a complete implementation
+            try
+            {
+                return Ok(_quizService.Get(id).ToApiModel());
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("UpdateBlog", ex.Message);
+                return BadRequest(ModelState);
+            }
         }
 
         // OPTIONAL - PUSH YOURSELF FURTHER

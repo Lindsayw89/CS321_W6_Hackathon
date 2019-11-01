@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuizApp.ApiModels;
+using QuizApp.Core.Models;
 using QuizApp.Core.Services;
 
 namespace QuizApp.Controllers
@@ -65,12 +66,19 @@ namespace QuizApp.Controllers
 
         // TODO: only authenticated users can call this action
         [HttpPost]
-        public IActionResult Add()
+        public IActionResult Add([FromBody] QuestionModel question)
         {
             // TODO: replace the following code with a complete implementation
             // that will add a new question 
-            ModelState.AddModelError("AddQuestion", "Not Implemented!");
-            return NotFound(ModelState);
+            try
+            {
+                return Ok(_questionService.Add(question.ToDomainModel()));
+            }
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("AddQuestion", ex.Message);
+                return NotFound(ModelState);
+            }
         }
 
         // TODO: only authenticated users can call this action
